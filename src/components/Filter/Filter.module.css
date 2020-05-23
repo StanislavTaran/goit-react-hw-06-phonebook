@@ -1,0 +1,12 @@
+.input {
+  display: block;
+  width: 100%;
+}
+.title {
+  margin: 5px 0;
+  color: #848888;
+}
+
+.container {
+  padding: 0 10px;
+}

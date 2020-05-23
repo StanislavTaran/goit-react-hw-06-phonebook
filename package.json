@@ -1,0 +1,57 @@
+{
+  "name": "goit-react-hw-02-phonebook",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://StanislavTaran.github.io/goit-react-hw-05-phonebook",
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "gh-pages": "^2.2.0",
+    "indicative": "^7.4.4",
+    "normalize.css": "^8.0.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-scripts": "3.4.1",
+    "react-transition-group": "^4.4.1",
+    "redux": "^4.0.5",
+    "uuid": "^7.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.2",
+    "prettier": "^2.0.4",
+    "pretty-quick": "^2.0.1"
+  }
+}

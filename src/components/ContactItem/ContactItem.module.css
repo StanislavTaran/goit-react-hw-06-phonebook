@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 80px;
+}
+
+.buttonDelete {
+  display: block;
+  height: 50px;
+  width: 50px;
+  border-style: solid;
+  border-width: 0px 0px 3px;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-style: normal;
+  text-align: center;
+  text-overflow: ellipsis;
+  transition: all 200ms ease-in-out 0s;
+  white-space: nowrap;
+  font-family: 'Gotham Rounded A', 'Gotham Rounded B', Helvetica, Arial, sans-serif;
+  background-color: #ed5a5a;
+  border-color: #ea4343;
+  background-image: url(https://img.icons8.com/carbon-copy/2x/delete-forever.png);
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.buttonDelete:hover,
+.buttonDelete:focus,
+.buttonDelete:active {
+  background-color: #eb4848;
+  border-color: #e83131;
+}
+
+.numberInfo {
+  width: 100%;
+}
+
+.name {
+  display: inline-block;
+  width: 40%;
+}

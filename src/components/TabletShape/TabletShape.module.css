@@ -1,0 +1,10 @@
+.screen {
+  box-sizing: border-box;
+  width: 800px;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: #fff;
+  overflow: auto;
+  border: 2px solid black;
+  position: relative;
+}
