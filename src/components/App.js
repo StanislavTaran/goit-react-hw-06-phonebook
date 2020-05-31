@@ -37,13 +37,6 @@ class App extends Component {
     });
   };
 
-  hanleFilterChange = e => {
-    const { value } = e.target;
-    this.setState({
-      filter: value,
-    });
-  };
-
   render() {
     const { contacts, isAlreadyinContacts } = this.props;
 

@@ -147,7 +147,6 @@ ContactForm.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    contact: state.contact,
     contacts: state.contacts.contacts,
     isContactAlreadyExist: state.notification.isContactAlreadyExist,
   };
