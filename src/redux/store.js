@@ -1,10 +1,16 @@
 /* eslint-disable no-underscore-dangle */
-import { createStore } from 'redux';
-import reducer from './reducer';
 
-const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
+import { configureStore } from '@reduxjs/toolkit';
+
+import ReduxThunk from 'redux-thunk';
+import rootReducer from './reducer';
+
+const middlewares = [ReduxThunk];
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: middlewares,
+  devTools: true,
+});
 
 export default store;

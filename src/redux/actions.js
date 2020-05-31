@@ -1,26 +1,16 @@
-import * as Types from './actionTypes';
+import { v4 as uuidv4 } from 'uuid';
+import { createAction } from '@reduxjs/toolkit';
 
-export const addContact = ({ name, number }) => ({
-  type: Types.ADD_CONTACT,
-  payload: { name, number },
-});
+export const addContactAction = createAction('ADD_CONTACT', (name, number) => ({
+  payload: { name, number, id: uuidv4() },
+}));
 
-export const deleteContact = id => ({
-  type: Types.DELETE_CONTACT,
-  payload: { id },
-});
+export const deleteContactAction = createAction('DELETE_CONTACT');
 
-export const editContact = id => ({
-  type: Types.START_EDIT_CONTACT,
-  payload: { id },
-});
+export const loadPersistedContacts = createAction('LOAD_PERSISTED_CONTACT');
 
-export const changeEditor = ({ name, number }) => ({
-  type: Types.CHANGE_EDITOR,
-  payload: { name, number },
-});
+export const onExistFlagAction = createAction('ON_FLAG_EXIST');
 
-export const saveContact = ({ name, number }) => ({
-  type: Types.SAVE_EDITED_CONTACT,
-  payload: { name, number },
-});
+export const offExistFlagAction = createAction('OFF_FLAG_EXIST');
+
+export const changeFilterAction = createAction('CHANGE_EDITOR');

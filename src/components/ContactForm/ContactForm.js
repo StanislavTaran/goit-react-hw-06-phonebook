@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { validateAll } from 'indicative/validator';
 import Notification from '../Notification/Notification';
 import styles from './ContactForm.module.css';
+import { addContactAction } from '../../redux/actions';
+import { toogleExistFlag } from '../../redux/operations';
 
 const rules = {
   name: 'required | string',
@@ -16,16 +19,11 @@ const messages = {
   'number.min': 'Number must be at least 2 characters',
 };
 
-export default class ContactForm extends Component {
-  static propTypes = {
-    onAddContact: propTypes.func.isRequired,
-  };
-
+class ContactForm extends Component {
   state = {
     name: '',
     number: '',
     errors: null,
-    isPageLoaded: false,
   };
 
   InputNameId = uuidv4();
@@ -33,7 +31,6 @@ export default class ContactForm extends Component {
   InputNuberId = uuidv4();
 
   handleChange = e => {
-    e.preventDefault();
     const { value, name } = e.target;
     let replaceValue = value;
 
@@ -53,18 +50,38 @@ export default class ContactForm extends Component {
     });
   };
 
-  handleSubmit = e => {
-    const { onAddContact } = this.props;
-    e.preventDefault();
+  resetForm = () => {
+    this.setState({
+      name: '',
+      number: '',
+      errors: null,
+    });
+  };
 
-    validateAll(this.state, rules, messages)
+  hasContact = name => {
+    const { contacts } = this.props;
+    return contacts.some(item => item.name.toLowerCase() === name.toLowerCase());
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const { addContact, showNotification } = this.props;
+
+    const { name, number } = this.state;
+
+    validateAll({ name, number }, rules, messages)
       .then(() => {
-        onAddContact({ ...this.state });
-        this.reset();
+        const isContactExist = this.hasContact(name);
+
+        if (isContactExist) {
+          showNotification();
+        } else {
+          addContact(name, number);
+          this.resetForm();
+        }
       })
       .catch(errors => {
         const formatedErrors = {};
-
         errors.forEach(error => {
           formatedErrors[error.field] = error.message;
         });
@@ -72,10 +89,6 @@ export default class ContactForm extends Component {
           errors: formatedErrors,
         });
       });
-  };
-
-  reset = () => {
-    this.setState({ name: '', number: '', errors: null });
   };
 
   render() {
@@ -120,3 +133,31 @@ export default class ContactForm extends Component {
     );
   }
 }
+
+ContactForm.propTypes = {
+  contacts: propTypes.arrayOf(
+    propTypes.shape({
+      name: propTypes.string.isRequired,
+      number: propTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+  addContact: propTypes.func.isRequired,
+  showNotification: propTypes.func.isRequired,
+};
+
+const mapStateToProps = state => {
+  return {
+    contact: state.contact,
+    contacts: state.contacts.contacts,
+    isContactAlreadyExist: state.notification.isContactAlreadyExist,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addContact: (name, number) => dispatch(addContactAction(name, number)),
+    showNotification: () => dispatch(toogleExistFlag()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

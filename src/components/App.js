@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import propTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
+import { loadPersistedContacts } from '../redux/actions';
 import Filter from './Filter/Filter';
 import Header from './Header/Header';
 import TabletShape from './TabletShape/TabletShape';
@@ -10,58 +12,22 @@ import PopUpNotification from './PopUpNotification/PopUpNotification';
 import slideTransition from '../transitions/slide.module.css';
 import slideReverseTransition from '../transitions/slide-reverse.module.css';
 
-export default class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-    isAlreadyinContacts: false,
-  };
-
+class App extends Component {
   componentDidMount() {
     const persistedContacts = localStorage.getItem('contacts');
+    const { loadContactsFromLS } = this.props;
 
     if (persistedContacts) {
-      this.setState({
-        contacts: JSON.parse(persistedContacts),
-      });
+      loadContactsFromLS(JSON.parse(persistedContacts));
     }
   }
 
   componentDidUpdate(prevState) {
-    const { contacts } = this.state;
+    const { contacts } = this.props;
     if (prevState.contacts !== contacts) {
       localStorage.setItem('contacts', JSON.stringify(contacts));
     }
   }
-
-  hasContact = name => {
-    const { contacts } = this.state;
-    return contacts.some(item => item.name.toLowerCase() === name.toLowerCase());
-  };
-
-  addToContacts = ({ name, number }) => {
-    const isAlreadyinContacts = this.hasContact(name);
-
-    if (isAlreadyinContacts) {
-      this.setState({
-        isAlreadyinContacts: true,
-      });
-    } else {
-      const contact = {
-        name,
-        number,
-        id: uuidv4(),
-      };
-      this.setState(state => {
-        return { contacts: [...state.contacts, contact] };
-      });
-    }
-  };
 
   removeContact = id => {
     this.setState(state => {
@@ -78,16 +44,8 @@ export default class App extends Component {
     });
   };
 
-  applyFilter() {
-    const { contacts, filter } = this.state;
-
-    return contacts.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()));
-  }
-
   render() {
-    const { contacts, isAlreadyinContacts } = this.state;
-
-    const filteredContacts = this.applyFilter();
+    const { contacts, isAlreadyinContacts } = this.props;
 
     return (
       <TabletShape>
@@ -97,15 +55,6 @@ export default class App extends Component {
           timeout={250}
           classNames={slideReverseTransition}
           unmountOnExit
-          onEntered={() => {
-            setTimeout(() => {
-              this.setState(() => {
-                return {
-                  isAlreadyinContacts: false,
-                };
-              });
-            }, 2000);
-          }}
         >
           <PopUpNotification title="Contact already exist!" />
         </CSSTransition>
@@ -125,9 +74,37 @@ export default class App extends Component {
           classNames={slideTransition}
           unmountOnExit
         >
-          <ContactList contacts={filteredContacts} onRemoveContact={this.removeContact} />
+          <ContactList onRemoveContact={this.removeContact} />
         </CSSTransition>
       </TabletShape>
     );
   }
 }
+
+App.propTypes = {
+  contacts: propTypes.arrayOf(
+    propTypes.shape({
+      id: propTypes.string.isRequired,
+      name: propTypes.string.isRequired,
+      number: propTypes.string.isRequired,
+    }),
+  ).isRequired,
+  isAlreadyinContacts: propTypes.bool.isRequired,
+  loadContactsFromLS: propTypes.func.isRequired,
+};
+
+const mapStateToProps = state => {
+  return {
+    contacts: state.contacts.contacts,
+    filter: state.contacts.filter,
+    isAlreadyinContacts: state.notification.isContactAlreadyExist,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loadContactsFromLS: contacts => dispatch(loadPersistedContacts(contacts)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
