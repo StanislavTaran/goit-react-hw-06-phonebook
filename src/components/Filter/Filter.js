@@ -1,8 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './Filter.module.css';
-import { changeFilterAction } from '../../redux/actions';
 
 const Filter = ({ hanleFilterChange }) => {
   return (
@@ -17,14 +15,8 @@ const Filter = ({ hanleFilterChange }) => {
   );
 };
 
-const mapStateToProps = null;
-
-const mapDispatchToProps = dispatch => ({
-  hanleFilterChange: filter => dispatch(changeFilterAction(filter)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
-
 Filter.propTypes = {
   hanleFilterChange: PropTypes.func.isRequired,
 };
+
+export default Filter;

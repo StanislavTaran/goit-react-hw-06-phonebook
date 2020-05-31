@@ -1,8 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { deleteContactAction } from '../../redux/actions';
 import ContactItem from '../ContactItem/ContactItem';
 import styles from './ContactList.module.css';
 import slideTransition from '../../transitions/slide.module.css';
@@ -44,15 +42,4 @@ ContactList.propTypes = {
   filter: propTypes.string.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {
-    contacts: state.contacts.contacts,
-    filter: state.contacts.filter,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  onRemoveContact: id => dispatch(deleteContactAction(id)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
+export default ContactList;
