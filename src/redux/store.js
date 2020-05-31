@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 import { configureStore } from '@reduxjs/toolkit';
 
 import ReduxThunk from 'redux-thunk';

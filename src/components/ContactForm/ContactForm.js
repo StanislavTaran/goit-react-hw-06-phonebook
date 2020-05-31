@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { validateAll } from 'indicative/validator';
 import Notification from '../Notification/Notification';
 import styles from './ContactForm.module.css';
-import { addContactAction } from '../../redux/actions';
-import { toogleExistFlag } from '../../redux/operations';
 
 const rules = {
   name: 'required | string',
@@ -145,18 +142,4 @@ ContactForm.propTypes = {
   showNotification: propTypes.func.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {
-    contacts: state.contacts.contacts,
-    isContactAlreadyExist: state.notification.isContactAlreadyExist,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addContact: (name, number) => dispatch(addContactAction(name, number)),
-    showNotification: () => dispatch(toogleExistFlag()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
+export default ContactForm;

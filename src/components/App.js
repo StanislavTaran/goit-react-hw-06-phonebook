@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
-import ContactForm from './ContactForm/ContactForm';
+import ContactForm from './ContactForm/ContactFormContainer';
 import ContactList from './ContactList/ContactListContainer';
-import { loadPersistedContacts } from '../redux/actions';
 import Filter from './Filter/FilterContainer';
 import Header from './Header/Header';
 import TabletShape from './TabletShape/TabletShape';
@@ -29,14 +27,6 @@ class App extends Component {
     }
   }
 
-  removeContact = id => {
-    this.setState(state => {
-      const contacts = state.contacts.filter(contact => contact.id !== id);
-      const filter = contacts.length > 1 ? state.filter : '';
-      return { contacts, filter };
-    });
-  };
-
   render() {
     const { contacts, isAlreadyinContacts } = this.props;
 
@@ -52,14 +42,14 @@ class App extends Component {
           <PopUpNotification title="Contact already exist!" />
         </CSSTransition>
 
-        <ContactForm onAddContact={this.addToContacts} />
+        <ContactForm />
         <CSSTransition
           in={contacts.length > 1}
           timeout={250}
           classNames={slideTransition}
           unmountOnExit
         >
-          <Filter hanleFilterChange={this.hanleFilterChange} />
+          <Filter />
         </CSSTransition>
         <CSSTransition
           in={contacts.length > 0}
@@ -67,7 +57,7 @@ class App extends Component {
           classNames={slideTransition}
           unmountOnExit
         >
-          <ContactList onRemoveContact={this.removeContact} />
+          <ContactList />
         </CSSTransition>
       </TabletShape>
     );
@@ -86,18 +76,4 @@ App.propTypes = {
   loadContactsFromLS: propTypes.func.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {
-    contacts: state.contacts.contacts,
-    filter: state.contacts.filter,
-    isAlreadyinContacts: state.notification.isContactAlreadyExist,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    loadContactsFromLS: contacts => dispatch(loadPersistedContacts(contacts)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
